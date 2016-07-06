@@ -1,0 +1,155 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Oktobar2015;
+namespace Ka
+{
+    public class Student: Osoba
+    {
+        public Student(string ime, string jmbg, string brojIndeksa): base(ime, jmbg)
+        {
+            this.brojIndeksa = brojIndeksa;
+            spisakIspita = new List<Ispit>();
+        }
+
+        string brojIndeksa;
+        List<Ispit> spisakIspita;
+
+        public string BrojIndeksa
+        {
+            get
+            {
+                return brojIndeksa;
+            }
+
+            set
+            {
+                brojIndeksa = value;
+            }
+        }
+
+        public List<Ispit> SpisakIspita
+        {
+            get
+            {
+                return spisakIspita;
+            }
+
+            set
+            {
+                spisakIspita = value;
+            }
+        }
+
+        public string Prva (int god)
+        {
+            string odg = "";
+            int godinaUpisa = Convert.ToInt32(brojIndeksa.Split('_')[1]);
+            if (godinaUpisa == god)
+            {
+                odg = "upisao";
+            }
+
+            else
+            {
+                odg = "nije upisao";
+            }
+            return odg;
+        }
+        public int Druga()
+        {
+            int ocj = 6;//Jako bitnoooo!!!!!!!
+            int godinaUpisa = Convert.ToInt32(brojIndeksa.Split('_')[1]);
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if ((DateTime.Now.Year - godinaUpisa) == 3 && ispit.Ocjena>ocj)
+                {
+                    ocj = ispit.Ocjena;                    
+                }
+               
+            }
+            return ocj;
+        }
+
+        public string Treca (Predmet p)
+        {
+            string pom = "";
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if (ispit.Predmet == p && ispit.Ocjena > 5)
+                {
+                    pom = "polozio";
+                }
+
+                else
+                {
+                    pom = "nije polozio";
+                }
+            }
+            return pom;
+        }
+
+        public int Cetvrta(string prof)
+        {
+            int brojPolaganja = 0;
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if (ispit.Predmet.Profesor == prof)
+                {
+                    brojPolaganja++;
+                }
+            }
+            return brojPolaganja;
+        }
+
+        public List<string> Peta()
+        {
+            List<string> profesori = new List<string>();
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if (!profesori.Contains(ispit.Predmet.Profesor))
+                {
+                    profesori.Add(ispit.Predmet.Profesor);
+                }
+            }
+            return profesori;
+        }
+
+        public List<DateTime> Sesta(Predmet p)
+        {
+            List<DateTime> datumi = new List<DateTime>();
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if (ispit.Predmet == p)
+                {
+                    datumi.Add(ispit.Datum);
+                }
+            }
+            return datumi;
+        }
+
+        //Svi predmeti sa određene godine studija iz kojih je student polagao ispit (bez ponavljanja).
+
+        public List<Predmet> Sedma(int god)
+        {
+            List<Predmet> predmeti = new List<Predmet>();
+            foreach (Ispit ispit in spisakIspita)
+            {
+                if (ispit.Datum.Year == god)
+                {
+                    if (!predmeti.Contains(ispit.Predmet))
+                    {
+                        predmeti.Add(ispit.Predmet);
+                    }
+                }
+            }
+            return predmeti;
+        }
+
+        static void Main(string[] args)
+        {
+        }
+    }
+}
